@@ -37,3 +37,35 @@ def worker_detail(request, pk):
     
     serializer = WorkerSerializer(worker)
     return Response(serializer.data)
+
+@api_view(['PUT', 'PATCH'])
+def update_worker(request, pk):
+    """
+    Update a worker's details.
+
+    - `PUT`: Updates all fields of a worker.
+    - `PATCH`: Updates specific fields of a worker.
+    """
+    try:
+        worker = Worker.objects.get(pk=pk)
+    except Worker.DoesNotExist:
+        return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = WorkerSerializer(worker, data=request.data, partial=(request.method == 'PATCH'))
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+def delete_worker(request, pk):
+    try:
+        worker = Worker.objects.get(pk=pk)
+    except Worker.DoesNotExist:
+        return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
+    
+    worker.delete()
+    return Response({'detail': 'Worker deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
