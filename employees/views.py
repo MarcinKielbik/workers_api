@@ -62,6 +62,10 @@ def update_worker(request, pk):
 
 @api_view(['DELETE'])
 def delete_worker(request, pk):
+    """
+        -`DELETE ` Delete worker
+    
+    """
     try:
         worker = Worker.objects.get(pk=pk)
     except Worker.DoesNotExist:
