@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import delete_worker, update_worker, worker_list, worker_detail, register, login
+from .views import delete_worker, update_worker, worker_list, worker_detail
 
 urlpatterns = [
     path('workers/', worker_list, name='worker-list'), 
