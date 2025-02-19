@@ -32,7 +32,10 @@ def worker_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
+
 def worker_detail(request, pk):
     """
     Retrieve a single worker by ID.
@@ -45,7 +48,10 @@ def worker_detail(request, pk):
     serializer = WorkerSerializer(worker)
     return Response(serializer.data)
 
+
 @api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+
 def update_worker(request, pk):
     """
     Update a worker's details.
@@ -68,6 +74,7 @@ def update_worker(request, pk):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_worker(request, pk):
     """
         -`DELETE ` Delete worker
