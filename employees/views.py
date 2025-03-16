@@ -16,6 +16,7 @@ from rest_framework.permissions import AllowAny
 def worker_list(request):
     """
     Handles worker list operations.
+    
 
     - `GET`: Retrieves a list of all workers.
     - `POST`: Creates a new worker or multiple workers at once.

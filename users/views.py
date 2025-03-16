@@ -5,6 +5,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -24,10 +26,15 @@ def register(request):
         return Response({"error": "User already exists"}, status=400)
 
     user = User.objects.create_user(username=username, password=password, email=email)
-    token, _ = Token.objects.get_or_create(user=user)
     
-    return Response({"message": "User created successfully", "token": token.key}, status=201)
+    # Generate JWT
+    refresh = RefreshToken.for_user(user)
+    access_token = str(refresh.access_token)
 
+    return Response({"message": "User created successfully", "access_token": access_token}, status=201)
+    
+    
+    
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -43,5 +50,8 @@ def login(request):
     if user is None:
         return Response({"error": "Invalid credentials"}, status=400)
 
-    token, _ = Token.objects.get_or_create(user=user)
-    return Response({"token": token.key})
+    # Genarate JWT
+    refresh = RefreshToken.for_user(user)
+    access_token = str(refresh.access_token)
+
+    return Response({"access_token": access_token})
